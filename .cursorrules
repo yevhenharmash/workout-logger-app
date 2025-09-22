@@ -1,0 +1,92 @@
+# Workout Logger App - Cursor Rules
+
+## Project Overview
+
+This is a React Native workout logging application built with Expo and React Native Paper. The app helps users track their fitness activities with a clean, modern UI.
+
+## Tech Stack
+
+- **Framework**: React Native with Expo
+- **UI Library**: React Native Paper (Material Design 3)
+- **Language**: TypeScript
+- **State Management**: React Context (for theming)
+- **Navigation**: BottomNavigation from React Native Paper
+
+## Project Structure
+
+```
+/
+├── components/          # Reusable UI components
+├── contexts/           # React Context providers
+├── screens/            # App screens
+├── web/                # Web-specific files
+├── App.tsx             # App entry point
+├── main.tsx            # Main component with providers
+└── package.json        # Dependencies
+```
+
+## Code Style Guidelines
+
+### React Native Paper Components
+
+- **Always prefer components from the current UI library** (React Native Paper)
+- If a component is not available in React Native Paper, suggest an alternative from the current library
+- If no suitable alternative exists, double-check with the developer before creating custom components
+- Apply theme colors using `useTheme()` hook
+- Prefer `Card`, `Button`, `Appbar`, `Title`, `Paragraph` from react-native-paper
+
+### Theming
+
+- Always use the theme context: `const { theme, isDark, toggleTheme } = useTheme()`
+- Apply theme colors: `backgroundColor: theme.colors.background`
+- Use consistent spacing with `styles.contentContainer` (16px horizontal padding)
+- Support both light and dark modes
+
+### Component Structure
+
+- Use functional components with TypeScript
+- Export components as default exports
+- Use StyleSheet.create() for styles
+- Keep components focused and single-purpose
+
+### Styling
+
+- Use consistent padding approach (no margins, use padding containers)
+- Apply `styles.contentContainer` for consistent horizontal spacing
+- Use theme colors instead of hardcoded colors
+- Follow Material Design 3 principles
+
+## Key Features
+
+- **Homepage**: Header with logo, theme toggle, current day workout card, monthly heatmap
+- **Navigation**: BottomNavigation with tabs (Home, Log Activity, Settings)
+- **Theming**: Light/dark mode with custom workout-themed colors
+- **Responsive**: Works on mobile and web platforms
+
+## Development Notes
+
+- The app uses custom theming with orange primary colors for workout theme
+- Heatmap component is currently a placeholder (can be replaced with react-native-calendars)
+- Web platform requires additional configuration for full compatibility
+- All components should be theme-aware and support both light/dark modes
+
+## File Naming
+
+- Use PascalCase for component files: `HomePage.tsx`
+- Use camelCase for utility files: `themeContext.tsx`
+- Use kebab-case for directories: `workout-logger-app`
+
+## Dependencies
+
+- react-native-paper: UI components and theming
+- react-native-vector-icons: Icons
+- expo: Development platform
+- react-native-safe-area-context: Safe area handling
+
+## When Adding New Features
+
+- Ensure theme compatibility
+- Use consistent spacing with contentContainer
+- Follow Material Design patterns
+- Test on both light and dark themes
+- Consider mobile-first design

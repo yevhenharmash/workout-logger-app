@@ -1,0 +1,24 @@
+{
+  "expo": {
+    "name": "Workout Logger",
+    "slug": "workout-logger-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#FFFFFF"
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "entryPoint": "./web/index.js"
+    }
+  }
+}

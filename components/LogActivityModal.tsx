@@ -1,20 +1,30 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
-import { Title, Paragraph, Button, IconButton, TextInput, Divider } from 'react-native-paper';
+import React, { useState } from "react";
+import { View, StyleSheet, ScrollView } from "react-native";
+import {
+  Title,
+  Paragraph,
+  Button,
+  IconButton,
+  TextInput,
+  Divider,
+} from "react-native-paper";
 
 interface LogActivityModalProps {
   onClose: () => void;
   theme: any;
 }
 
-const LogActivityModal: React.FC<LogActivityModalProps> = ({ onClose, theme }) => {
-  const [activityName, setActivityName] = useState('');
-  const [duration, setDuration] = useState('');
-  const [notes, setNotes] = useState('');
+export const LogActivityModal: React.FC<LogActivityModalProps> = ({
+  onClose,
+  theme,
+}) => {
+  const [activityName, setActivityName] = useState("");
+  const [duration, setDuration] = useState("");
+  const [notes, setNotes] = useState("");
 
   const handleSave = () => {
     // TODO: Implement save logic
-    console.log('Saving activity:', { activityName, duration, notes });
+    console.log("Saving activity:", { activityName, duration, notes });
     onClose();
   };
 
@@ -28,9 +38,9 @@ const LogActivityModal: React.FC<LogActivityModalProps> = ({ onClose, theme }) =
           iconColor={theme.colors.onSurface}
         />
       </View>
-      
+
       <Divider style={{ marginBottom: 16 }} />
-      
+
       <ScrollView style={styles.modalBody} showsVerticalScrollIndicator={false}>
         <TextInput
           label="Activity Name"
@@ -39,7 +49,7 @@ const LogActivityModal: React.FC<LogActivityModalProps> = ({ onClose, theme }) =
           mode="outlined"
           style={styles.input}
         />
-        
+
         <TextInput
           label="Duration (minutes)"
           value={duration}
@@ -48,7 +58,7 @@ const LogActivityModal: React.FC<LogActivityModalProps> = ({ onClose, theme }) =
           keyboardType="numeric"
           style={styles.input}
         />
-        
+
         <TextInput
           label="Notes (optional)"
           value={notes}
@@ -59,15 +69,8 @@ const LogActivityModal: React.FC<LogActivityModalProps> = ({ onClose, theme }) =
           style={styles.input}
         />
       </ScrollView>
-      
+
       <View style={styles.modalActions}>
-        <Button
-          mode="outlined"
-          onPress={onClose}
-          style={styles.button}
-        >
-          Cancel
-        </Button>
         <Button
           mode="contained"
           onPress={handleSave}
@@ -76,6 +79,9 @@ const LogActivityModal: React.FC<LogActivityModalProps> = ({ onClose, theme }) =
           style={styles.button}
         >
           Save Activity
+        </Button>
+        <Button mode="outlined" onPress={onClose} style={styles.button}>
+          Cancel
         </Button>
       </View>
     </View>
@@ -88,9 +94,9 @@ const styles = StyleSheet.create({
     paddingTop: 8,
   },
   modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingVertical: 8,
   },
   modalBody: {
@@ -100,15 +106,11 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   modalActions: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "column",
     paddingVertical: 16,
     paddingBottom: 32, // Extra padding for safe area
   },
   button: {
-    flex: 1,
-    marginHorizontal: 8,
+    marginBottom: 8,
   },
 });
-
-export default LogActivityModal;

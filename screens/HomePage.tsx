@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 import {
   Appbar,
@@ -10,17 +10,23 @@ import {
   BottomNavigation,
 } from "react-native-paper";
 import { useTheme } from "../contexts/ThemeContext";
-import Logo from "../components/Logo";
-import Heatmap from "../components/Heatmap";
-import BottomSheetModal from "../components/BottomSheetModal";
-import ProModal from "../components/ProModal";
-import LogActivityModal from "../components/LogActivityModal";
+import { Logo } from "../components/Logo";
+import { Heatmap } from "../components/Heatmap";
+import {
+  BottomSheetModal,
+  BottomSheetModalRef,
+} from "../components/BottomSheetModal";
+import { ProModal } from "../components/ProModal";
+import { LogActivityModal } from "../components/LogActivityModal";
+import { HistoryModal } from "../components/HistoryModal";
 
-const HomePage = () => {
+export const HomePage = () => {
   const [index, setIndex] = useState(0);
-  const [showLogModal, setShowLogModal] = useState(false);
-  const [showProModal, setShowProModal] = useState(false);
   const { theme, toggleTheme } = useTheme();
+
+  const logModalRef = useRef<BottomSheetModalRef>(null);
+  const proModalRef = useRef<BottomSheetModalRef>(null);
+  const historyModalRef = useRef<BottomSheetModalRef>(null);
 
   const [routes] = useState([
     { key: "home", title: "Home", icon: "home-outline", focusedIcon: "home" },
@@ -39,7 +45,7 @@ const HomePage = () => {
   ]);
 
   const renderScene = BottomNavigation.SceneMap({
-    home: HomeScreen,
+    home: () => <HomeScreen onHistoryPress={handleShowHistoryModal} />,
     log: () => null, // We'll handle this with modal
     settings: SettingsScreen,
   });
@@ -47,7 +53,7 @@ const HomePage = () => {
   const handleIndexChange = (newIndex: number) => {
     const route = routes[newIndex];
     if (route.key === "log") {
-      setShowLogModal(true);
+      logModalRef.current?.expand();
       // Don't change the index, stay on current tab
       return;
     }
@@ -55,11 +61,23 @@ const HomePage = () => {
   };
 
   const handleCloseModal = () => {
-    setShowLogModal(false);
+    logModalRef.current?.close();
   };
 
   const handleCloseProModal = () => {
-    setShowProModal(false);
+    proModalRef.current?.close();
+  };
+
+  const handleShowProModal = () => {
+    proModalRef.current?.expand();
+  };
+
+  const handleShowHistoryModal = () => {
+    historyModalRef.current?.expand();
+  };
+
+  const handleCloseHistoryModal = () => {
+    historyModalRef.current?.close();
   };
 
   return (
@@ -83,7 +101,7 @@ const HomePage = () => {
           mode="contained"
           buttonColor={theme.colors.secondary}
           textColor={theme.colors.onSecondary}
-          onPress={() => setShowProModal(true)}
+          onPress={handleShowProModal}
           icon="crown"
         >
           Pro
@@ -106,18 +124,26 @@ const HomePage = () => {
         shifting={false}
       />
 
-      <BottomSheetModal visible={showLogModal} onDismiss={handleCloseModal}>
+      <BottomSheetModal ref={logModalRef} onClose={handleCloseModal}>
         <LogActivityModal onClose={handleCloseModal} theme={theme} />
       </BottomSheetModal>
 
-      <BottomSheetModal visible={showProModal} onDismiss={handleCloseProModal}>
+      <BottomSheetModal ref={proModalRef} onClose={handleCloseProModal}>
         <ProModal onClose={handleCloseProModal} theme={theme} />
+      </BottomSheetModal>
+
+      <BottomSheetModal
+        ref={historyModalRef}
+        snapPoints={["70%", "90%"]}
+        onClose={handleCloseHistoryModal}
+      >
+        <HistoryModal onClose={handleCloseHistoryModal} theme={theme} />
       </BottomSheetModal>
     </View>
   );
 };
 
-const HomeScreen = () => (
+const HomeScreen = ({ onHistoryPress }: { onHistoryPress: () => void }) => (
   <ScrollView
     style={[styles.contentContainer, { flex: 1 }]}
     showsVerticalScrollIndicator={false}
@@ -132,7 +158,7 @@ const HomeScreen = () => (
       </Card.Actions>
     </Card>
 
-    <Heatmap />
+    <Heatmap onHistoryPress={onHistoryPress} />
   </ScrollView>
 );
 
@@ -174,5 +200,3 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
   },
 });
-
-export default HomePage;

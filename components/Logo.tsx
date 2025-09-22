@@ -1,10 +1,10 @@
-import React from 'react';
-import { IconButton } from 'react-native-paper';
-import { useTheme } from '../contexts/ThemeContext';
+import React from "react";
+import { IconButton } from "react-native-paper";
+import { useTheme } from "../contexts/ThemeContext";
 
-const Logo = () => {
+export const Logo = () => {
   const { theme } = useTheme();
-  
+
   return (
     <IconButton
       icon="dumbbell"
@@ -14,5 +14,3 @@ const Logo = () => {
     />
   );
 };
-
-export default Logo;

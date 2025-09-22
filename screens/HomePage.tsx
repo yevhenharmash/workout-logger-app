@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 import {
   Appbar,
@@ -12,15 +12,16 @@ import {
 import { useTheme } from "../contexts/ThemeContext";
 import Logo from "../components/Logo";
 import Heatmap from "../components/Heatmap";
-import BottomSheetModal from "../components/BottomSheetModal";
+import BottomSheetModal, { BottomSheetModalRef } from "../components/BottomSheetModal";
 import ProModal from "../components/ProModal";
 import LogActivityModal from "../components/LogActivityModal";
 
 const HomePage = () => {
   const [index, setIndex] = useState(0);
-  const [showLogModal, setShowLogModal] = useState(false);
-  const [showProModal, setShowProModal] = useState(false);
   const { theme, toggleTheme } = useTheme();
+  
+  const logModalRef = useRef<BottomSheetModalRef>(null);
+  const proModalRef = useRef<BottomSheetModalRef>(null);
 
   const [routes] = useState([
     { key: "home", title: "Home", icon: "home-outline", focusedIcon: "home" },
@@ -47,7 +48,7 @@ const HomePage = () => {
   const handleIndexChange = (newIndex: number) => {
     const route = routes[newIndex];
     if (route.key === "log") {
-      setShowLogModal(true);
+      logModalRef.current?.expand();
       // Don't change the index, stay on current tab
       return;
     }
@@ -55,11 +56,15 @@ const HomePage = () => {
   };
 
   const handleCloseModal = () => {
-    setShowLogModal(false);
+    logModalRef.current?.close();
   };
 
   const handleCloseProModal = () => {
-    setShowProModal(false);
+    proModalRef.current?.close();
+  };
+
+  const handleShowProModal = () => {
+    proModalRef.current?.expand();
   };
 
   return (
@@ -83,7 +88,7 @@ const HomePage = () => {
           mode="contained"
           buttonColor={theme.colors.secondary}
           textColor={theme.colors.onSecondary}
-          onPress={() => setShowProModal(true)}
+          onPress={handleShowProModal}
           icon="crown"
         >
           Pro
@@ -106,11 +111,11 @@ const HomePage = () => {
         shifting={false}
       />
 
-      <BottomSheetModal visible={showLogModal} onDismiss={handleCloseModal}>
+      <BottomSheetModal ref={logModalRef} onClose={handleCloseModal}>
         <LogActivityModal onClose={handleCloseModal} theme={theme} />
       </BottomSheetModal>
 
-      <BottomSheetModal visible={showProModal} onDismiss={handleCloseProModal}>
+      <BottomSheetModal ref={proModalRef} onClose={handleCloseProModal}>
         <ProModal onClose={handleCloseProModal} theme={theme} />
       </BottomSheetModal>
     </View>

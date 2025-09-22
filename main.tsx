@@ -3,6 +3,7 @@ import { Text, View, TouchableOpacity, Animated, Platform, PanResponder } from '
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider as PaperProvider } from 'react-native-paper';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { ThemeProvider } from './contexts/ThemeContext';
 import HomePage from './screens/HomePage';
 
@@ -18,9 +19,11 @@ if (Platform.OS !== 'web') {
 
 const Main = () => {
   return (
-    <ThemeProvider>
-      <HomePage />
-    </ThemeProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <ThemeProvider>
+        <HomePage />
+      </ThemeProvider>
+    </GestureHandlerRootView>
   );
 };
 

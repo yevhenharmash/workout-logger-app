@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { Appbar, Card, Title, Paragraph, Button, IconButton, BottomNavigation } from 'react-native-paper';
 import { useTheme } from '../contexts/ThemeContext';
 import Logo from '../components/Logo';
@@ -29,7 +29,7 @@ const HomePage = () => {
         <Appbar.Action 
           icon="theme-light-dark" 
           onPress={toggleTheme}
-          iconColor="#333333"
+          iconColor={theme.colors.secondary}
         />
         <Button 
           mode="contained" 
@@ -55,7 +55,7 @@ const HomePage = () => {
 };
 
 const HomeScreen = () => (
-  <View style={[styles.contentContainer, { flex: 1 }]}>
+  <ScrollView style={[styles.contentContainer, { flex: 1 }]} showsVerticalScrollIndicator={false}>
     <Card style={styles.card}>
       <Card.Content>
         <Title>Today - {new Date().toLocaleDateString()}</Title>
@@ -67,7 +67,7 @@ const HomeScreen = () => (
     </Card>
 
     <Heatmap />
-  </View>
+  </ScrollView>
 );
 
 const LogScreen = () => (

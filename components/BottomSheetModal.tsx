@@ -1,6 +1,12 @@
-import React, { useEffect, useRef } from 'react';
-import { View, StyleSheet, Dimensions, Animated, TouchableWithoutFeedback } from 'react-native';
-import { Modal, Portal, useTheme } from 'react-native-paper';
+import React, { useEffect, useRef } from "react";
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  Animated,
+  TouchableWithoutFeedback,
+} from "react-native";
+import { Modal, Portal, useTheme } from "react-native-paper";
 
 interface BottomSheetModalProps {
   visible: boolean;
@@ -20,12 +26,12 @@ const BottomSheetModal: React.FC<BottomSheetModalProps> = ({
   children,
   maxHeight = 0.8,
   backgroundColor,
-  animationDuration = { show: 300, hide: 250 }
+  animationDuration = { show: 300, hide: 250 },
 }) => {
   const theme = useTheme();
   const slideAnim = useRef(new Animated.Value(0)).current;
-  const screenHeight = Dimensions.get('window').height;
-  
+  const screenHeight = Dimensions.get("window").height;
+
   // Use theme surface color as default if no backgroundColor is provided
   const modalBackgroundColor = backgroundColor || theme.colors.surface;
 
@@ -61,13 +67,15 @@ const BottomSheetModal: React.FC<BottomSheetModalProps> = ({
                   {
                     maxHeight: screenHeight * maxHeight,
                     backgroundColor: modalBackgroundColor,
-                    transform: [{
-                      translateY: slideAnim.interpolate({
-                        inputRange: [0, 1],
-                        outputRange: [screenHeight, 0],
-                      })
-                    }]
-                  }
+                    transform: [
+                      {
+                        translateY: slideAnim.interpolate({
+                          inputRange: [0, 1],
+                          outputRange: [screenHeight, 0],
+                        }),
+                      },
+                    ],
+                  },
                 ]}
               >
                 {children}
@@ -83,24 +91,25 @@ const BottomSheetModal: React.FC<BottomSheetModalProps> = ({
 const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
-    justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: "flex-end",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   overlay: {
     flex: 1,
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
   },
   modalContainer: {
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     elevation: 8,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: -2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
+    flexDirection: "column",
   },
 });
 

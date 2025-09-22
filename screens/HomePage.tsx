@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import { Appbar, Card, Title, Paragraph, Button, IconButton, BottomNavigation } from 'react-native-paper';
+import { Appbar, Card, Title, Paragraph, Button, IconButton, BottomNavigation, TextInput, Divider } from 'react-native-paper';
 import { useTheme } from '../contexts/ThemeContext';
 import Logo from '../components/Logo';
 import Heatmap from '../components/Heatmap';
+import BottomSheetModal from '../components/BottomSheetModal';
 
 const HomePage = () => {
   const [index, setIndex] = useState(0);
+  const [showLogModal, setShowLogModal] = useState(false);
   const { theme, toggleTheme } = useTheme();
 
   const [routes] = useState([
@@ -17,13 +19,32 @@ const HomePage = () => {
 
   const renderScene = BottomNavigation.SceneMap({
     home: HomeScreen,
-    log: LogScreen,
+    log: () => null, // We'll handle this with modal
     settings: SettingsScreen,
   });
 
+  const handleIndexChange = (newIndex: number) => {
+    const route = routes[newIndex];
+    if (route.key === 'log') {
+      setShowLogModal(true);
+      // Don't change the index, stay on current tab
+      return;
+    }
+    setIndex(newIndex);
+  };
+
+  const handleCloseModal = () => {
+    setShowLogModal(false);
+  };
+
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-      <Appbar.Header style={styles.contentContainer}>
+      <Appbar.Header 
+        style={[
+          styles.contentContainer,
+          { backgroundColor: theme.colors.surface }
+        ]}
+      >
         <Logo />
         <Appbar.Content title="" />
         <Appbar.Action 
@@ -42,14 +63,31 @@ const HomePage = () => {
 
       <BottomNavigation
         navigationState={{ index, routes }}
-        onIndexChange={setIndex}
+        onIndexChange={handleIndexChange}
         renderScene={renderScene}
-        barStyle={{ backgroundColor: theme.colors.surface }}
+        barStyle={[
+          styles.bottomNavigation,
+          { 
+            backgroundColor: theme.colors.surface
+          }
+        ]}
         activeColor={theme.colors.primary}
         inactiveColor={theme.colors.onSurfaceVariant}
         labeled={true}
         shifting={false}
       />
+
+      <BottomSheetModal
+        visible={showLogModal}
+        onDismiss={handleCloseModal}
+        maxHeight={0.8}
+        backgroundColor={theme.colors.surface}
+      >
+        <LogActivityModal 
+          onClose={handleCloseModal}
+          theme={theme}
+        />
+      </BottomSheetModal>
     </View>
   );
 };
@@ -70,11 +108,87 @@ const HomeScreen = () => (
   </ScrollView>
 );
 
+const LogActivityModal = ({ onClose, theme }: { onClose: () => void; theme: any }) => {
+  const [activityName, setActivityName] = useState('');
+  const [duration, setDuration] = useState('');
+  const [notes, setNotes] = useState('');
+
+  const handleSave = () => {
+    // TODO: Implement save logic
+    console.log('Saving activity:', { activityName, duration, notes });
+    onClose();
+  };
+
+  return (
+    <View style={styles.modalContent}>
+      <View style={styles.modalHeader}>
+        <Title>Log Activity</Title>
+        <IconButton
+          icon="close"
+          onPress={onClose}
+          iconColor={theme.colors.onSurface}
+        />
+      </View>
+      
+      <Divider style={{ marginBottom: 16 }} />
+      
+      <ScrollView style={styles.modalBody} showsVerticalScrollIndicator={false}>
+        <TextInput
+          label="Activity Name"
+          value={activityName}
+          onChangeText={setActivityName}
+          mode="outlined"
+          style={styles.input}
+        />
+        
+        <TextInput
+          label="Duration (minutes)"
+          value={duration}
+          onChangeText={setDuration}
+          mode="outlined"
+          keyboardType="numeric"
+          style={styles.input}
+        />
+        
+        <TextInput
+          label="Notes (optional)"
+          value={notes}
+          onChangeText={setNotes}
+          mode="outlined"
+          multiline
+          numberOfLines={3}
+          style={styles.input}
+        />
+      </ScrollView>
+      
+      <View style={styles.modalActions}>
+        <Button
+          mode="outlined"
+          onPress={onClose}
+          style={styles.button}
+        >
+          Cancel
+        </Button>
+        <Button
+          mode="contained"
+          onPress={handleSave}
+          buttonColor={theme.colors.primary}
+          textColor={theme.colors.onPrimary}
+          style={styles.button}
+        >
+          Save Activity
+        </Button>
+      </View>
+    </View>
+  );
+};
+
 const LogScreen = () => (
   <View style={styles.center}>
     <Title>Log Activity Screen</Title>
   </View>
 );
+
 const SettingsScreen = () => (
   <View style={styles.center}>
     <Title>Settings Screen</Title>
@@ -95,6 +209,44 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  bottomNavigation: {
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: -2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+  },
+  modalContent: {
+    flex: 1,
+    paddingHorizontal: 16,
+    paddingTop: 8,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 8,
+  },
+  modalBody: {
+    flex: 1,
+    paddingVertical: 8,
+  },
+  input: {
+    marginBottom: 16,
+  },
+  modalActions: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 16,
+    paddingBottom: 32, // Extra padding for safe area
+  },
+  button: {
+    flex: 1,
+    marginHorizontal: 8,
   },
 });
 

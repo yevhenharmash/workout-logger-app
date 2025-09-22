@@ -110,9 +110,6 @@ const ProModal: React.FC<ProModalProps> = ({ onClose, theme }) => {
       </ScrollView>
 
       <View style={styles.modalActions}>
-        <Button mode="outlined" onPress={onClose} style={styles.button}>
-          Maybe Later
-        </Button>
         <Button
           mode="contained"
           onPress={handleUpgrade}
@@ -122,6 +119,9 @@ const ProModal: React.FC<ProModalProps> = ({ onClose, theme }) => {
           style={styles.button}
         >
           Upgrade Now
+        </Button>
+        <Button mode="outlined" onPress={onClose} style={styles.button}>
+          Maybe Later
         </Button>
       </View>
     </View>
@@ -143,14 +143,12 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   modalActions: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: "column",
     paddingVertical: 16,
     paddingBottom: 32, // Extra padding for safe area
   },
   button: {
-    flex: 1,
-    marginHorizontal: 8,
+    marginBottom: 8,
   },
   proContent: {
     alignItems: "center",

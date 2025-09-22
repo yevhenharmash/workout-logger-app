@@ -12,16 +12,20 @@ import {
 import { useTheme } from "../contexts/ThemeContext";
 import Logo from "../components/Logo";
 import Heatmap from "../components/Heatmap";
-import BottomSheetModal, { BottomSheetModalRef } from "../components/BottomSheetModal";
+import BottomSheetModal, {
+  BottomSheetModalRef,
+} from "../components/BottomSheetModal";
 import ProModal from "../components/ProModal";
 import LogActivityModal from "../components/LogActivityModal";
+import HistoryModal from "../components/HistoryModal";
 
 const HomePage = () => {
   const [index, setIndex] = useState(0);
   const { theme, toggleTheme } = useTheme();
-  
+
   const logModalRef = useRef<BottomSheetModalRef>(null);
   const proModalRef = useRef<BottomSheetModalRef>(null);
+  const historyModalRef = useRef<BottomSheetModalRef>(null);
 
   const [routes] = useState([
     { key: "home", title: "Home", icon: "home-outline", focusedIcon: "home" },
@@ -40,7 +44,7 @@ const HomePage = () => {
   ]);
 
   const renderScene = BottomNavigation.SceneMap({
-    home: HomeScreen,
+    home: () => <HomeScreen onHistoryPress={handleShowHistoryModal} />,
     log: () => null, // We'll handle this with modal
     settings: SettingsScreen,
   });
@@ -65,6 +69,14 @@ const HomePage = () => {
 
   const handleShowProModal = () => {
     proModalRef.current?.expand();
+  };
+
+  const handleShowHistoryModal = () => {
+    historyModalRef.current?.expand();
+  };
+
+  const handleCloseHistoryModal = () => {
+    historyModalRef.current?.close();
   };
 
   return (
@@ -118,11 +130,19 @@ const HomePage = () => {
       <BottomSheetModal ref={proModalRef} onClose={handleCloseProModal}>
         <ProModal onClose={handleCloseProModal} theme={theme} />
       </BottomSheetModal>
+
+      <BottomSheetModal
+        ref={historyModalRef}
+        snapPoints={["70%", "90%"]}
+        onClose={handleCloseHistoryModal}
+      >
+        <HistoryModal onClose={handleCloseHistoryModal} theme={theme} />
+      </BottomSheetModal>
     </View>
   );
 };
 
-const HomeScreen = () => (
+const HomeScreen = ({ onHistoryPress }: { onHistoryPress: () => void }) => (
   <ScrollView
     style={[styles.contentContainer, { flex: 1 }]}
     showsVerticalScrollIndicator={false}
@@ -137,7 +157,7 @@ const HomeScreen = () => (
       </Card.Actions>
     </Card>
 
-    <Heatmap />
+    <Heatmap onHistoryPress={onHistoryPress} />
   </ScrollView>
 );
 

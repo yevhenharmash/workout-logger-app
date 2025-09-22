@@ -69,7 +69,9 @@ const BottomSheetModal = forwardRef<BottomSheetModalRef, BottomSheetModalProps>(
         backdropComponent={renderBackdrop}
         backgroundStyle={[
           styles.background,
-          { backgroundColor: theme.colors.surface },
+          {
+            backgroundColor: theme.colors.surface,
+          },
         ]}
         handleIndicatorStyle={[
           styles.handleIndicator,
@@ -100,6 +102,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     padding: 16,
     paddingBottom: 32,
+    // maxHeight: "90%",
   },
 });
 

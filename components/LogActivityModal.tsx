@@ -84,7 +84,6 @@ const LogActivityModal: React.FC<LogActivityModalProps> = ({ onClose, theme }) =
 
 const styles = StyleSheet.create({
   modalContent: {
-    flex: 1,
     paddingHorizontal: 16,
     paddingTop: 8,
   },
@@ -95,7 +94,6 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   modalBody: {
-    flex: 1,
     paddingVertical: 8,
   },
   input: {

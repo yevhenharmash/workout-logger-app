@@ -1,6 +1,13 @@
-import React from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
-import { Title, Paragraph, Button, IconButton, Divider, Card } from 'react-native-paper';
+import React from "react";
+import { View, StyleSheet, ScrollView } from "react-native";
+import {
+  Title,
+  Paragraph,
+  Button,
+  IconButton,
+  Divider,
+  Card,
+} from "react-native-paper";
 
 interface ProModalProps {
   onClose: () => void;
@@ -10,7 +17,7 @@ interface ProModalProps {
 const ProModal: React.FC<ProModalProps> = ({ onClose, theme }) => {
   const handleUpgrade = () => {
     // TODO: Implement upgrade logic
-    console.log('Upgrading to Pro...');
+    console.log("Upgrading to Pro...");
     onClose();
   };
 
@@ -24,9 +31,9 @@ const ProModal: React.FC<ProModalProps> = ({ onClose, theme }) => {
           iconColor={theme.colors.onSurface}
         />
       </View>
-      
+
       <Divider style={{ marginBottom: 16 }} />
-      
+
       <ScrollView style={styles.modalBody} showsVerticalScrollIndicator={false}>
         <View style={styles.proContent}>
           <IconButton
@@ -35,36 +42,64 @@ const ProModal: React.FC<ProModalProps> = ({ onClose, theme }) => {
             iconColor={theme.colors.secondary}
             style={styles.crownIcon}
           />
-          
+
           <Title style={styles.proTitle}>Unlock Premium Features</Title>
-          
+
           <View style={styles.featureList}>
             <View style={styles.featureItem}>
-              <IconButton icon="check-circle" size={20} iconColor={theme.colors.primary} />
-              <Paragraph style={styles.featureText}>Unlimited workout logging</Paragraph>
+              <IconButton
+                icon="check-circle"
+                size={20}
+                iconColor={theme.colors.primary}
+              />
+              <Paragraph style={styles.featureText}>
+                Unlimited workout logging
+              </Paragraph>
             </View>
-            
+
             <View style={styles.featureItem}>
-              <IconButton icon="check-circle" size={20} iconColor={theme.colors.primary} />
-              <Paragraph style={styles.featureText}>Advanced analytics & insights</Paragraph>
+              <IconButton
+                icon="check-circle"
+                size={20}
+                iconColor={theme.colors.primary}
+              />
+              <Paragraph style={styles.featureText}>
+                Advanced analytics & insights
+              </Paragraph>
             </View>
-            
+
             <View style={styles.featureItem}>
-              <IconButton icon="check-circle" size={20} iconColor={theme.colors.primary} />
-              <Paragraph style={styles.featureText}>Custom workout plans</Paragraph>
+              <IconButton
+                icon="check-circle"
+                size={20}
+                iconColor={theme.colors.primary}
+              />
+              <Paragraph style={styles.featureText}>
+                Custom workout plans
+              </Paragraph>
             </View>
-            
+
             <View style={styles.featureItem}>
-              <IconButton icon="check-circle" size={20} iconColor={theme.colors.primary} />
-              <Paragraph style={styles.featureText}>Export data & reports</Paragraph>
+              <IconButton
+                icon="check-circle"
+                size={20}
+                iconColor={theme.colors.primary}
+              />
+              <Paragraph style={styles.featureText}>
+                Export data & reports
+              </Paragraph>
             </View>
-            
+
             <View style={styles.featureItem}>
-              <IconButton icon="check-circle" size={20} iconColor={theme.colors.primary} />
+              <IconButton
+                icon="check-circle"
+                size={20}
+                iconColor={theme.colors.primary}
+              />
               <Paragraph style={styles.featureText}>Priority support</Paragraph>
             </View>
           </View>
-          
+
           <Card style={styles.pricingCard}>
             <Card.Content>
               <Title style={styles.priceTitle}>$4.99/month</Title>
@@ -73,13 +108,9 @@ const ProModal: React.FC<ProModalProps> = ({ onClose, theme }) => {
           </Card>
         </View>
       </ScrollView>
-      
+
       <View style={styles.modalActions}>
-        <Button
-          mode="outlined"
-          onPress={onClose}
-          style={styles.button}
-        >
+        <Button mode="outlined" onPress={onClose} style={styles.button}>
           Maybe Later
         </Button>
         <Button
@@ -103,17 +134,17 @@ const styles = StyleSheet.create({
     paddingTop: 8,
   },
   modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingVertical: 8,
   },
   modalBody: {
     paddingVertical: 8,
   },
   modalActions: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     paddingVertical: 16,
     paddingBottom: 32, // Extra padding for safe area
   },
@@ -122,23 +153,23 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
   },
   proContent: {
-    alignItems: 'center',
+    alignItems: "center",
     paddingVertical: 16,
   },
   crownIcon: {
     marginBottom: 16,
   },
   proTitle: {
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: 24,
   },
   featureList: {
-    width: '100%',
+    width: "100%",
     marginBottom: 24,
   },
   featureItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 12,
   },
   featureText: {
@@ -146,16 +177,16 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   pricingCard: {
-    width: '100%',
-    alignItems: 'center',
+    width: "100%",
+    alignItems: "center",
   },
   priceTitle: {
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   priceSubtitle: {
-    textAlign: 'center',
+    textAlign: "center",
     opacity: 0.7,
   },
 });

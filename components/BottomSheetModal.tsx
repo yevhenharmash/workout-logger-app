@@ -12,28 +12,19 @@ interface BottomSheetModalProps {
   visible: boolean;
   onDismiss: () => void;
   children: React.ReactNode;
-  maxHeight?: number;
-  backgroundColor?: string;
-  animationDuration?: {
-    show: number;
-    hide: number;
-  };
 }
+
+const maxHeight = 0.9;
+const animationDuration = { show: 300, hide: 250 };
 
 const BottomSheetModal: React.FC<BottomSheetModalProps> = ({
   visible,
   onDismiss,
   children,
-  maxHeight = 0.8,
-  backgroundColor,
-  animationDuration = { show: 300, hide: 250 },
 }) => {
   const theme = useTheme();
   const slideAnim = useRef(new Animated.Value(0)).current;
   const screenHeight = Dimensions.get("window").height;
-
-  // Use theme surface color as default if no backgroundColor is provided
-  const modalBackgroundColor = backgroundColor || theme.colors.surface;
 
   useEffect(() => {
     if (visible) {
@@ -66,7 +57,7 @@ const BottomSheetModal: React.FC<BottomSheetModalProps> = ({
                   styles.modalContainer,
                   {
                     maxHeight: screenHeight * maxHeight,
-                    backgroundColor: modalBackgroundColor,
+                    backgroundColor: theme.colors.surface,
                     transform: [
                       {
                         translateY: slideAnim.interpolate({

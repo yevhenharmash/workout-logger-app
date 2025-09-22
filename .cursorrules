@@ -45,7 +45,7 @@ This is a React Native workout logging application built with Expo and React Nat
 ### Component Structure
 
 - Use functional components with TypeScript
-- Export components as default exports
+- **Avoid default exports** - Use named exports for better tree-shaking and clarity
 - Use StyleSheet.create() for styles
 - Keep components focused and single-purpose
 

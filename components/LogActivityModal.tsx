@@ -14,7 +14,7 @@ interface LogActivityModalProps {
   theme: any;
 }
 
-const LogActivityModal: React.FC<LogActivityModalProps> = ({
+export const LogActivityModal: React.FC<LogActivityModalProps> = ({
   onClose,
   theme,
 }) => {
@@ -114,5 +114,3 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
 });
-
-export default LogActivityModal;

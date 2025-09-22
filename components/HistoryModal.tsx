@@ -1,13 +1,17 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { Title, Button, IconButton, Divider } from "react-native-paper";
+import { CalendarModalContent } from "./Calendar";
 
 interface HistoryModalProps {
   onClose: () => void;
   theme: any;
 }
 
-const HistoryModal: React.FC<HistoryModalProps> = ({ onClose, theme }) => {
+export const HistoryModal: React.FC<HistoryModalProps> = ({
+  onClose,
+  theme,
+}) => {
   return (
     <View style={styles.modalContent}>
       <View style={styles.modalHeader}>
@@ -21,12 +25,12 @@ const HistoryModal: React.FC<HistoryModalProps> = ({ onClose, theme }) => {
 
       <Divider style={{ marginBottom: 16 }} />
 
-      <View style={styles.emptyContent}>
-        <Title style={styles.emptyTitle}>History Coming Soon</Title>
-        <Button mode="outlined" onPress={onClose}>
-          Close
-        </Button>
-      </View>
+      <CalendarModalContent
+        onDateSelect={(date) => {
+          console.log("Selected date:", date);
+          // You can add logic here to show workout history for the selected date
+        }}
+      />
     </View>
   );
 };
@@ -42,15 +46,4 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingVertical: 8,
   },
-  emptyContent: {
-    alignItems: "center",
-    paddingVertical: 40,
-  },
-  emptyTitle: {
-    textAlign: "center",
-    marginBottom: 20,
-    opacity: 0.7,
-  },
 });
-
-export default HistoryModal;

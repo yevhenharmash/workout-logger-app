@@ -19,7 +19,10 @@ export interface BottomSheetModalRef {
   close: () => void;
 }
 
-const BottomSheetModal = forwardRef<BottomSheetModalRef, BottomSheetModalProps>(
+export const BottomSheetModal = forwardRef<
+  BottomSheetModalRef,
+  BottomSheetModalProps
+>(
   (
     {
       children,
@@ -105,7 +108,3 @@ const styles = StyleSheet.create({
     // maxHeight: "90%",
   },
 });
-
-BottomSheetModal.displayName = "BottomSheetModal";
-
-export default BottomSheetModal;

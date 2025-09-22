@@ -14,7 +14,7 @@ interface ProModalProps {
   theme: any;
 }
 
-const ProModal: React.FC<ProModalProps> = ({ onClose, theme }) => {
+export const ProModal: React.FC<ProModalProps> = ({ onClose, theme }) => {
   const handleUpgrade = () => {
     // TODO: Implement upgrade logic
     console.log("Upgrading to Pro...");
@@ -188,5 +188,3 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
 });
-
-export default ProModal;

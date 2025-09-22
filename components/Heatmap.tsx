@@ -7,7 +7,7 @@ interface HeatmapProps {
   onHistoryPress?: () => void;
 }
 
-const Heatmap: React.FC<HeatmapProps> = ({ onHistoryPress }) => {
+export const Heatmap: React.FC<HeatmapProps> = ({ onHistoryPress }) => {
   const { theme } = useTheme();
   const scrollViewRef = useRef(null);
 
@@ -177,5 +177,3 @@ const styles = StyleSheet.create({
     borderRadius: 3,
   },
 });
-
-export default Heatmap;

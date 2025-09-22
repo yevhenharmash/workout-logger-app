@@ -10,16 +10,17 @@ import {
   BottomNavigation,
 } from "react-native-paper";
 import { useTheme } from "../contexts/ThemeContext";
-import Logo from "../components/Logo";
-import Heatmap from "../components/Heatmap";
-import BottomSheetModal, {
+import { Logo } from "../components/Logo";
+import { Heatmap } from "../components/Heatmap";
+import {
+  BottomSheetModal,
   BottomSheetModalRef,
 } from "../components/BottomSheetModal";
-import ProModal from "../components/ProModal";
-import LogActivityModal from "../components/LogActivityModal";
-import HistoryModal from "../components/HistoryModal";
+import { ProModal } from "../components/ProModal";
+import { LogActivityModal } from "../components/LogActivityModal";
+import { HistoryModal } from "../components/HistoryModal";
 
-const HomePage = () => {
+export const HomePage = () => {
   const [index, setIndex] = useState(0);
   const { theme, toggleTheme } = useTheme();
 
@@ -199,5 +200,3 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
   },
 });
-
-export default HomePage;

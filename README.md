@@ -1,9 +1,6 @@
-@todos:
+@todos (always keep at least one empty item for convenience):
 
-- the favicon should be
-  <IconButton
-  icon="dumbbell"
--
+1.
 
 ---
 

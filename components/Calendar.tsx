@@ -1,74 +1,207 @@
 import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
-import { Card, useTheme, Text } from "react-native-paper";
-import { Calendar } from "react-native-calendars";
+import { View, StyleSheet, ScrollView } from "react-native";
+import { Card, useTheme, Text, Button, IconButton } from "react-native-paper";
 
 export const CalendarModalContent = ({
   onDateSelect,
+  workoutDates = [],
 }: {
   onDateSelect?: (date: string) => void;
+  workoutDates?: string[]; // Array of dates in YYYY-MM-DD format
 }) => {
-  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  const [currentMonth, setCurrentMonth] = useState(new Date());
   const theme = useTheme();
 
-  const calendarTheme = {
-    // backgroundColor: theme.colors.surface,
-    // calendarBackground: theme.colors.surface,
-    // textSectionTitleColor: theme.colors.onSurfaceVariant,
-    // selectedDayBackgroundColor: theme.colors.primary,
-    // selectedDayTextColor: theme.colors.onPrimary,
-    // todayTextColor: theme.colors.primary,
-    // dayTextColor: theme.colors.onSurface,
-    // textDisabledColor: theme.colors.onSurfaceDisabled,
-    // dotColor: theme.colors.primary,
-    // selectedDotColor: theme.colors.onPrimary,
-    // arrowColor: theme.colors.primary,
-    // monthTextColor: theme.colors.onSurface,
-    indicatorColor: theme.colors.primary,
-    textDayFontFamily: theme.fonts?.bodyLarge?.fontFamily,
-    textMonthFontFamily: theme.fonts?.headlineSmall?.fontFamily,
-    textDayHeaderFontFamily: theme.fonts?.bodyMedium?.fontFamily,
-    textDayFontWeight: "400" as const,
-    textMonthFontWeight: "bold" as const,
-    textDayHeaderFontWeight: "500" as const,
-    textDayFontSize: 16,
-    textMonthFontSize: 18,
-    textDayHeaderFontSize: 14,
+  const getDaysInMonth = (date: Date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const daysInMonth = lastDay.getDate();
+    // Adjust for Monday start: Sunday = 0, Monday = 1, etc.
+    const startingDayOfWeek = (firstDay.getDay() + 6) % 7; // Convert to Monday = 0
+
+    const days = [];
+
+    // Add empty cells for days before the first day of the month
+    for (let i = 0; i < startingDayOfWeek; i++) {
+      days.push(null);
+    }
+
+    // Add days of the month
+    for (let day = 1; day <= daysInMonth; day++) {
+      days.push(new Date(year, month, day));
+    }
+
+    return days;
   };
 
+  const handleDateSelect = (date: Date) => {
+    setSelectedDate(date);
+    onDateSelect?.(date.toISOString().split("T")[0]);
+  };
+
+  const isWorkoutDay = (date: Date) => {
+    const dateString = date.toISOString().split("T")[0];
+    return workoutDates.includes(dateString);
+  };
+
+  const isCurrentDay = (date: Date) => {
+    const today = new Date();
+    return (
+      date.getDate() === today.getDate() &&
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear()
+    );
+  };
+
+  const isSelectedDay = (date: Date) => {
+    return selectedDate && date.toDateString() === selectedDate.toDateString();
+  };
+
+  const navigateMonth = (direction: "prev" | "next") => {
+    const newMonth = new Date(currentMonth);
+    if (direction === "prev") {
+      newMonth.setMonth(newMonth.getMonth() - 1);
+    } else {
+      newMonth.setMonth(newMonth.getMonth() + 1);
+    }
+    setCurrentMonth(newMonth);
+  };
+
+  const days = getDaysInMonth(currentMonth);
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
   return (
-    <Calendar
-      onDayPress={(day) => {
-        setSelectedDate(day.dateString);
-        onDateSelect?.(day.dateString);
-      }}
-      markedDates={{
-        [selectedDate]: {
-          selected: true,
-          marked: true,
-          selectedColor: theme.colors.primary,
-        },
-      }}
-      theme={calendarTheme}
-      style={styles.modalCalendar}
-    />
+    <Card style={styles.calendarWrapper}>
+      <Card.Content>
+        {/* Header */}
+        <View style={styles.header}>
+          <IconButton
+            icon="chevron-left"
+            onPress={() => navigateMonth("prev")}
+            iconColor={theme.colors.onSurface}
+          />
+          <Text variant="titleMedium" style={{ color: theme.colors.onSurface }}>
+            {monthNames[currentMonth.getMonth()]} {currentMonth.getFullYear()}
+          </Text>
+          <IconButton
+            icon="chevron-right"
+            onPress={() => navigateMonth("next")}
+            iconColor={theme.colors.onSurface}
+          />
+        </View>
+
+        {/* Day names */}
+        <View style={styles.dayNamesRow}>
+          {dayNames.map((day) => (
+            <Text
+              key={day}
+              variant="bodySmall"
+              style={[styles.dayName, { color: theme.colors.onSurfaceVariant }]}
+            >
+              {day}
+            </Text>
+          ))}
+        </View>
+
+        {/* Calendar grid */}
+        <View style={styles.calendarGrid}>
+          {days.map((day, index) => (
+            <View key={index} style={styles.dayCell}>
+              {day ? (
+                <Button
+                  mode={isSelectedDay(day) ? "contained" : "text"}
+                  onPress={() => handleDateSelect(day)}
+                  style={[
+                    styles.dayButton,
+                    isWorkoutDay(day) && {
+                      backgroundColor: theme.colors.secondary,
+                    },
+                    isCurrentDay(day) && {
+                      borderWidth: 2,
+                      borderColor: theme.colors.primary,
+                    },
+                    isSelectedDay(day) && {
+                      backgroundColor: theme.colors.primary,
+                    },
+                  ]}
+                  labelStyle={{
+                    color: isWorkoutDay(day)
+                      ? theme.colors.onSecondary
+                      : isSelectedDay(day)
+                      ? theme.colors.onPrimary
+                      : theme.colors.onSurface,
+                    fontWeight: isCurrentDay(day) ? "bold" : "normal",
+                  }}
+                >
+                  {day.getDate().toString()}
+                </Button>
+              ) : (
+                <View style={styles.emptyDay} />
+              )}
+            </View>
+          ))}
+        </View>
+      </Card.Content>
+    </Card>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-  },
-  calendar: {
+  calendarWrapper: {
     borderRadius: 8,
+    marginVertical: 8,
   },
-  modalCalendar: {
-    borderRadius: 8,
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 16,
   },
-  selectedText: {
-    marginTop: 16,
+  dayNamesRow: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginBottom: 8,
+  },
+  dayName: {
     textAlign: "center",
-    fontSize: 18,
+    fontWeight: "500",
+    width: 40,
+  },
+  calendarGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
+  dayCell: {
+    width: "14.28%", // 100% / 7 days
+    aspectRatio: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: 2,
+  },
+  dayButton: {
+    minWidth: 32,
+    minHeight: 32,
+    borderRadius: 16,
+  },
+  emptyDay: {
+    width: 32,
+    height: 32,
   },
 });

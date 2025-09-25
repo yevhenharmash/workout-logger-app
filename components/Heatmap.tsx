@@ -9,7 +9,7 @@ interface HeatmapProps {
 
 export const Heatmap: React.FC<HeatmapProps> = ({ onHistoryPress }) => {
   const { theme } = useTheme();
-  const scrollViewRef = useRef(null);
+  const scrollViewRef = useRef<ScrollView>(null);
 
   // Calculate weeks passed since January 1st, 2025
   const startDate = new Date("2025-01-01");
@@ -32,9 +32,24 @@ export const Heatmap: React.FC<HeatmapProps> = ({ onHistoryPress }) => {
   };
 
   // Helper function to check if a date has workout data
-  const getWorkoutData = (date) => {
+  const getWorkoutData = (date: Date) => {
     const dateString = date.toISOString().split("T")[0];
-    return workoutData[dateString] || { logged: false, intensity: 0 };
+    return (
+      workoutData[dateString as keyof typeof workoutData] || {
+        logged: false,
+        intensity: 0,
+      }
+    );
+  };
+
+  // Helper function to check if a date is today
+  const isToday = (date: Date) => {
+    const today = new Date();
+    return (
+      date.getDate() === today.getDate() &&
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear()
+    );
   };
 
   // Generate data for each week that has passed (each week is a column)
@@ -58,6 +73,7 @@ export const Heatmap: React.FC<HeatmapProps> = ({ onHistoryPress }) => {
         day: dayIndex, // 0 = Monday, 1 = Tuesday, etc.
         logged: workout.logged,
         intensity: workout.intensity,
+        isToday: isToday(date),
       };
     });
 
@@ -120,6 +136,11 @@ export const Heatmap: React.FC<HeatmapProps> = ({ onHistoryPress }) => {
                             ? theme.colors.secondary // Solid secondary color for any workout
                             : theme.colors.surfaceVariant, // Themed color for no workout
                         },
+                        day.isToday && {
+                          borderWidth: 2,
+                          borderColor: theme.colors.primary,
+                          transform: [{ scale: 1.1 }], // Slightly larger to make it stand out
+                        }, // Apply today highlighting
                       ]}
                     />
                   ))}

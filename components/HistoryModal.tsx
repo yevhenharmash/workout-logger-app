@@ -30,6 +30,14 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
           console.log("Selected date:", date);
           // You can add logic here to show workout history for the selected date
         }}
+        workoutDates={[
+          // Same workout data as Heatmap component
+          "2025-09-15",
+          "2025-09-16",
+          "2025-09-18",
+          "2025-09-20",
+          "2025-09-21",
+        ]}
       />
     </View>
   );

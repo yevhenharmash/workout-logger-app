@@ -60,6 +60,24 @@ export const CalendarModalContent = ({
     return selectedDate && date.toDateString() === selectedDate.toDateString();
   };
 
+  const isFutureDate = (date: Date) => {
+    const today = new Date();
+    today.setHours(23, 59, 59, 999); // End of today
+    return date > today;
+  };
+
+  const isNextMonthDisabled = () => {
+    const today = new Date();
+    const nextMonth = new Date(currentMonth);
+    nextMonth.setMonth(nextMonth.getMonth() + 1);
+
+    // Disable if next month is in the future
+    return (
+      nextMonth.getMonth() > today.getMonth() ||
+      nextMonth.getFullYear() > today.getFullYear()
+    );
+  };
+
   const navigateMonth = (direction: "prev" | "next") => {
     const newMonth = new Date(currentMonth);
     if (direction === "prev") {
@@ -102,8 +120,15 @@ export const CalendarModalContent = ({
           </Text>
           <IconButton
             icon="chevron-right"
-            onPress={() => navigateMonth("next")}
-            iconColor={theme.colors.onSurface}
+            onPress={
+              isNextMonthDisabled() ? undefined : () => navigateMonth("next")
+            }
+            disabled={isNextMonthDisabled()}
+            iconColor={
+              isNextMonthDisabled()
+                ? theme.colors.onSurfaceDisabled
+                : theme.colors.onSurface
+            }
           />
         </View>
 
@@ -127,12 +152,16 @@ export const CalendarModalContent = ({
               {day ? (
                 <Button
                   mode={isSelectedDay(day) ? "contained" : "text"}
-                  onPress={() => handleDateSelect(day)}
+                  onPress={
+                    isFutureDate(day) ? undefined : () => handleDateSelect(day)
+                  }
+                  disabled={isFutureDate(day)}
                   style={[
                     styles.dayButton,
-                    isWorkoutDay(day) && {
-                      backgroundColor: theme.colors.secondary,
-                    },
+                    isWorkoutDay(day) &&
+                      !isFutureDate(day) && {
+                        backgroundColor: theme.colors.secondary,
+                      },
                     isCurrentDay(day) && {
                       borderWidth: 2,
                       borderColor: theme.colors.primary,
@@ -140,9 +169,14 @@ export const CalendarModalContent = ({
                     isSelectedDay(day) && {
                       backgroundColor: theme.colors.primary,
                     },
+                    isFutureDate(day) && {
+                      opacity: 0.4,
+                    },
                   ]}
                   labelStyle={{
-                    color: isWorkoutDay(day)
+                    color: isFutureDate(day)
+                      ? theme.colors.onSurfaceDisabled
+                      : isWorkoutDay(day) && !isFutureDate(day)
                       ? theme.colors.onSecondary
                       : isSelectedDay(day)
                       ? theme.colors.onPrimary

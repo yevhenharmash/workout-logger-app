@@ -279,6 +279,7 @@ export const LogActivityModal: React.FC<LogActivityModalProps> = ({
                       onPress={() => toggleMenu(exercise.id)}
                       style={styles.exerciseSelectButton}
                       contentStyle={styles.exerciseSelectContent}
+                      icon="dumbbell"
                     >
                       {exercise.name || "Select Exercise"}
                     </Button>
@@ -419,6 +420,7 @@ export const LogActivityModal: React.FC<LogActivityModalProps> = ({
           onPress={handleSave}
           buttonColor={theme.colors.primary}
           textColor={theme.colors.onPrimary}
+          icon="check"
         >
           Save Workout
         </Button>

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Dimensions } from "react-native";
 import { Title, Button, IconButton, Divider } from "react-native-paper";
 import { CalendarModalContent } from "./Calendar";
 
@@ -13,7 +13,9 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
   theme,
 }) => {
   return (
-    <View style={styles.modalContent}>
+    <View
+      style={[styles.modalContent, { backgroundColor: theme.colors.surface }]}
+    >
       <View style={styles.modalHeader}>
         <Title>Workout History</Title>
         <IconButton
@@ -43,10 +45,15 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
   );
 };
 
+const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
+
 const styles = StyleSheet.create({
   modalContent: {
-    paddingHorizontal: 16,
+    width: screenWidth,
+    height: screenHeight,
+    paddingHorizontal: 8,
     paddingTop: 8,
+    paddingBottom: 16,
   },
   modalHeader: {
     flexDirection: "row",

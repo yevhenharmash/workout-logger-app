@@ -151,24 +151,28 @@ export const CalendarModalContent = ({
             <View key={index} style={styles.dayCell}>
               {day ? (
                 <Button
-                  mode={isSelectedDay(day) ? "contained" : "text"}
+                  mode="text"
                   onPress={
                     isFutureDate(day) ? undefined : () => handleDateSelect(day)
                   }
                   disabled={isFutureDate(day)}
                   style={[
                     styles.dayButton,
-                    isWorkoutDay(day) &&
-                      !isFutureDate(day) && {
-                        backgroundColor: theme.colors.secondary,
-                      },
-                    isCurrentDay(day) && {
-                      borderWidth: 2,
-                      borderColor: theme.colors.primary,
-                    },
+                    // Apply background colors first
                     isSelectedDay(day) && {
                       backgroundColor: theme.colors.primary,
                     },
+                    isWorkoutDay(day) &&
+                      !isFutureDate(day) &&
+                      !isSelectedDay(day) && {
+                        backgroundColor: theme.colors.secondary,
+                      },
+                    // Apply border for current day (only if not selected)
+                    isCurrentDay(day) &&
+                      !isSelectedDay(day) && {
+                        borderWidth: 2,
+                        borderColor: theme.colors.primary,
+                      },
                     isFutureDate(day) && {
                       opacity: 0.4,
                     },
@@ -176,10 +180,10 @@ export const CalendarModalContent = ({
                   labelStyle={{
                     color: isFutureDate(day)
                       ? theme.colors.onSurfaceDisabled
-                      : isWorkoutDay(day) && !isFutureDate(day)
-                      ? theme.colors.onSecondary
                       : isSelectedDay(day)
                       ? theme.colors.onPrimary
+                      : isWorkoutDay(day) && !isFutureDate(day)
+                      ? theme.colors.onSecondary
                       : theme.colors.onSurface,
                     fontWeight: isCurrentDay(day) ? "bold" : "normal",
                   }}
@@ -201,6 +205,7 @@ const styles = StyleSheet.create({
   calendarWrapper: {
     borderRadius: 8,
     marginVertical: 8,
+    width: "100%",
   },
   header: {
     flexDirection: "row",
@@ -210,17 +215,19 @@ const styles = StyleSheet.create({
   },
   dayNamesRow: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
     marginBottom: 8,
+    width: "100%",
   },
   dayName: {
     textAlign: "center",
     fontWeight: "500",
-    width: 40,
+    flex: 1,
   },
   calendarGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
+    width: "100%",
   },
   dayCell: {
     width: "14.28%", // 100% / 7 days

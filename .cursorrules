@@ -83,6 +83,12 @@ This is a React Native workout logging application built with Expo and React Nat
 - expo: Development platform
 - react-native-safe-area-context: Safe area handling
 
+## Package Manager
+
+- **Always use yarn, not npm** for all package management operations
+- Use `yarn add`, `yarn install`, `yarn remove` instead of npm equivalents
+- Use `yarn expo` instead of `npx expo` for Expo CLI commands
+
 ## When Adding New Features
 
 - Ensure theme compatibility

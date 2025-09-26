@@ -6,7 +6,7 @@
 
 - reps: Number of repetitions.
 - - weight: Weight used (can be 0 for bodyweight).
-- - - unit: 'kg', 'lbs', or 'bodyweight'. (kg / lbs can be changed in settings)
+- - - unit: 'kg' / 'lbs', or 'bodyweight'. (kg / lbs can be changed in settings)a
 
 what about running?
 

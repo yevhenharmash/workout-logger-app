@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from "react";
 import { Card, Text, Button } from "react-native-paper";
 import { View, StyleSheet, ScrollView } from "react-native";
 import { useTheme } from "../contexts/ThemeContext";
+import { useWorkouts } from "../contexts/WorkoutContext";
 
 interface HeatmapProps {
   onHistoryPress?: () => void;
@@ -9,6 +10,7 @@ interface HeatmapProps {
 
 export const Heatmap: React.FC<HeatmapProps> = ({ onHistoryPress }) => {
   const { theme } = useTheme();
+  const { workoutDates, isLoading } = useWorkouts();
   const scrollViewRef = useRef<ScrollView>(null);
 
   // Calculate weeks passed since January 1st, 2025
@@ -22,14 +24,11 @@ export const Heatmap: React.FC<HeatmapProps> = ({ onHistoryPress }) => {
 
   const daysPerWeek = 7;
 
-  // Dummy workout data for September 2025
-  const workoutData = {
-    "2025-09-15": { logged: true, intensity: 3 }, // Sunday - High intensity
-    "2025-09-16": { logged: true, intensity: 2 }, // Monday - Medium intensity
-    "2025-09-18": { logged: true, intensity: 4 }, // Wednesday - Very high intensity
-    "2025-09-20": { logged: true, intensity: 1 }, // Friday - Light workout
-    "2025-09-21": { logged: true, intensity: 2 }, // Saturday - Medium intensity
-  };
+  // Use real workout data from storage
+  const workoutData = workoutDates.reduce((acc, date) => {
+    acc[date] = { logged: true, intensity: 2 }; // Default intensity for now
+    return acc;
+  }, {} as Record<string, { logged: boolean; intensity: number }>);
 
   // Helper function to check if a date has workout data
   const getWorkoutData = (date: Date) => {
@@ -84,7 +83,7 @@ export const Heatmap: React.FC<HeatmapProps> = ({ onHistoryPress }) => {
     };
   });
 
-  const dayLabels = ["M", "T", "W", "T", "F", "S", "S"]; // Monday first for calendar view
+  const dayLabels = ["M", "T", "W", "T", "F", "S", "S"]; // Always Monday first
 
   // Scroll to the end on first render
   useEffect(() => {

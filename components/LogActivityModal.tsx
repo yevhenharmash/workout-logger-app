@@ -12,6 +12,8 @@ import {
   Searchbar,
 } from "react-native-paper";
 import { useSettings } from "../contexts/SettingsContext";
+import { useWorkouts } from "../contexts/WorkoutContext";
+import { Workout, Exercise, Set } from "../services/WorkoutStorage";
 
 // Predefined list of common exercises
 const EXERCISES = [
@@ -94,24 +96,7 @@ const EXERCISES = [
   "Foam Rolling",
 ];
 
-interface Set {
-  reps: number;
-  weight: number;
-  unit: "kg" | "lbs" | "bodyw";
-}
-
-interface Exercise {
-  id: string;
-  name: string;
-  sets: Set[];
-}
-
-interface Workout {
-  name: string;
-  date: string;
-  exercises: Exercise[];
-  notes?: string;
-}
+// Interfaces are now imported from WorkoutStorage
 
 interface LogActivityModalProps {
   onClose: () => void;
@@ -123,6 +108,7 @@ export const LogActivityModal: React.FC<LogActivityModalProps> = ({
   theme,
 }) => {
   const { weightUnit: globalWeightUnit } = useSettings();
+  const { addWorkout } = useWorkouts();
   const [workoutName, setWorkoutName] = useState("");
   const [notes, setNotes] = useState("");
   const [exercises, setExercises] = useState<Exercise[]>([]);
@@ -218,16 +204,23 @@ export const LogActivityModal: React.FC<LogActivityModalProps> = ({
     );
   };
 
-  const handleSave = () => {
-    const workout: Workout = {
-      name: workoutName,
-      date: new Date().toISOString().split("T")[0],
-      exercises: exercises.filter((ex) => ex.name.trim() !== ""),
-      notes: notes.trim() || undefined,
-    };
+  const handleSave = async () => {
+    try {
+      const workout: Workout = {
+        id: Date.now().toString(),
+        name: workoutName,
+        date: new Date().toISOString().split("T")[0],
+        exercises: exercises.filter((ex) => ex.name.trim() !== ""),
+        notes: notes.trim() || undefined,
+      };
 
-    console.log("Saving workout:", workout);
-    onClose();
+      await addWorkout(workout);
+      console.log("Workout saved successfully:", workout);
+      onClose();
+    } catch (error) {
+      console.error("Error saving workout:", error);
+      // You could add a toast notification here to show the error to the user
+    }
   };
 
   return (

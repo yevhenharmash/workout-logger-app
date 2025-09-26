@@ -36,8 +36,8 @@ export const HomePage = () => {
     {
       key: "log",
       title: "Quick Workout",
-      icon: "plus-circle-outline",
-      focusedIcon: "plus-circle",
+      icon: "dumbbell",
+      focusedIcon: "dumbbell",
     },
     {
       key: "settings",

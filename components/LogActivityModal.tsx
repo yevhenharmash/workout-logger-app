@@ -369,7 +369,7 @@ export const LogActivityModal: React.FC<LogActivityModalProps> = ({
                     />
                   )}
 
-                  <View style={styles.unitContainer}>
+                  <View>
                     <Button
                       mode="outlined"
                       onPress={() => {
@@ -389,6 +389,7 @@ export const LogActivityModal: React.FC<LogActivityModalProps> = ({
                   </View>
 
                   <IconButton
+                    style={styles.deleteButton}
                     icon="delete"
                     onPress={() => removeSet(exercise.id, setIndex)}
                     iconColor={theme.colors.error}
@@ -470,9 +471,7 @@ const styles = StyleSheet.create({
   },
   exerciseSelectButton: {
     flex: 1,
-    marginRight: 12,
     justifyContent: "flex-start",
-    minHeight: 48,
   },
   exerciseSelectContent: {
     justifyContent: "flex-start",
@@ -510,21 +509,16 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   setNumber: {
-    width: 30,
-    textAlign: "center",
-    marginRight: 4,
+    width: 15,
+    flexShrink: 0,
   },
   setInput: {
     width: 60,
     marginRight: 8,
   },
-  unitContainer: {
-    minWidth: 70,
-  },
   unitButton: {
     minWidth: 70,
     minHeight: 36,
-    paddingHorizontal: 8,
   },
   modalActions: {
     flexDirection: "column",
@@ -534,5 +528,8 @@ const styles = StyleSheet.create({
   button: {
     marginBottom: 12,
     minHeight: 48,
+  },
+  deleteButton: {
+    marginLeft: "auto",
   },
 });

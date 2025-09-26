@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 import {
   Text,
@@ -8,14 +8,96 @@ import {
   TextInput,
   Divider,
   Card,
-  Chip,
+  Menu,
+  Searchbar,
 } from "react-native-paper";
 import { useSettings } from "../contexts/SettingsContext";
+
+// Predefined list of common exercises
+const EXERCISES = [
+  // Upper Body
+  "Bench Press",
+  "Incline Bench Press",
+  "Decline Bench Press",
+  "Overhead Press",
+  "Shoulder Press",
+  "Lateral Raises",
+  "Front Raises",
+  "Pull-ups",
+  "Chin-ups",
+  "Lat Pulldown",
+  "Bent-over Rows",
+  "Cable Rows",
+  "Bicep Curls",
+  "Hammer Curls",
+  "Tricep Dips",
+  "Tricep Extensions",
+  "Push-ups",
+  "Diamond Push-ups",
+  "Pike Push-ups",
+
+  // Lower Body
+  "Squats",
+  "Front Squats",
+  "Back Squats",
+  "Bulgarian Split Squats",
+  "Lunges",
+  "Walking Lunges",
+  "Deadlifts",
+  "Romanian Deadlifts",
+  "Leg Press",
+  "Leg Curls",
+  "Leg Extensions",
+  "Calf Raises",
+  "Hip Thrusts",
+  "Glute Bridges",
+  "Step-ups",
+
+  // Core
+  "Plank",
+  "Side Plank",
+  "Russian Twists",
+  "Mountain Climbers",
+  "Crunches",
+  "Sit-ups",
+  "Leg Raises",
+  "Bicycle Crunches",
+  "Dead Bug",
+  "Bird Dog",
+  "Hollow Hold",
+
+  // Cardio
+  "Running",
+  "Walking",
+  "Cycling",
+  "Rowing",
+  "Swimming",
+  "Jump Rope",
+  "Burpees",
+  "High Knees",
+  "Jumping Jacks",
+  "Elliptical",
+  "Stair Climbing",
+
+  // Functional
+  "Kettlebell Swings",
+  "Turkish Get-ups",
+  "Farmer's Walk",
+  "Battle Ropes",
+  "Box Jumps",
+  "Medicine Ball Slams",
+
+  // Yoga/Stretching
+  "Yoga",
+  "Pilates",
+  "Stretching",
+  "Foam Rolling",
+];
 
 interface Set {
   reps: number;
   weight: number;
-  unit: "kg" | "lbs" | "bodyweight";
+  unit: "kg" | "lbs" | "bodyw";
 }
 
 interface Exercise {
@@ -44,18 +126,38 @@ export const LogActivityModal: React.FC<LogActivityModalProps> = ({
   const [workoutName, setWorkoutName] = useState("");
   const [notes, setNotes] = useState("");
   const [exercises, setExercises] = useState<Exercise[]>([]);
-  const [weightUnit, setWeightUnit] = useState<"kg" | "lbs">("kg");
+  const [exerciseSearch, setExerciseSearch] = useState("");
+  const [openMenus, setOpenMenus] = useState<{ [key: string]: boolean }>({});
 
-  // Update local weight unit when global setting changes
-  useEffect(() => {
-    setWeightUnit(globalWeightUnit);
-  }, [globalWeightUnit]);
+  // Filter exercises based on search
+  const filteredExercises = EXERCISES.filter((exercise) =>
+    exercise.toLowerCase().includes(exerciseSearch.toLowerCase())
+  );
+
+  // Toggle menu visibility for a specific exercise
+  const toggleMenu = (exerciseId: string) => {
+    setOpenMenus((prev) => ({
+      ...prev,
+      [exerciseId]: !prev[exerciseId],
+    }));
+  };
+
+  // Close all menus
+  const closeAllMenus = () => {
+    setOpenMenus({});
+  };
+
+  // Select an exercise
+  const selectExercise = (exerciseId: string, exerciseName: string) => {
+    updateExerciseName(exerciseId, exerciseName);
+    closeAllMenus();
+  };
 
   const addExercise = () => {
     const newExercise: Exercise = {
       id: Date.now().toString(),
       name: "",
-      sets: [{ reps: 0, weight: 0, unit: weightUnit }],
+      sets: [{ reps: 0, weight: 0, unit: globalWeightUnit }],
     };
     setExercises([...exercises, newExercise]);
   };
@@ -76,7 +178,10 @@ export const LogActivityModal: React.FC<LogActivityModalProps> = ({
         ex.id === exerciseId
           ? {
               ...ex,
-              sets: [...ex.sets, { reps: 0, weight: 0, unit: weightUnit }],
+              sets: [
+                ...ex.sets,
+                { reps: 0, weight: 0, unit: globalWeightUnit },
+              ],
             }
           : ex
       )
@@ -148,27 +253,9 @@ export const LogActivityModal: React.FC<LogActivityModalProps> = ({
           placeholder="e.g., Push Day, Morning Run"
         />
 
-        <View style={styles.weightUnitContainer}>
-          <Text variant="bodyMedium" style={styles.weightUnitLabel}>
-            Weight Unit:
-          </Text>
-          <View style={styles.weightUnitChips}>
-            <Chip
-              selected={weightUnit === "kg"}
-              onPress={() => setWeightUnit("kg")}
-              style={styles.weightUnitChip}
-            >
-              kg
-            </Chip>
-            <Chip
-              selected={weightUnit === "lbs"}
-              onPress={() => setWeightUnit("lbs")}
-              style={styles.weightUnitChip}
-            >
-              lbs
-            </Chip>
-          </View>
-        </View>
+        <Text variant="bodySmall" style={styles.disclaimerText}>
+          💡 You can change weight units (kg/lbs) in Settings
+        </Text>
 
         <Divider style={styles.divider} />
 
@@ -183,14 +270,42 @@ export const LogActivityModal: React.FC<LogActivityModalProps> = ({
           <Card key={exercise.id} style={styles.exerciseCard}>
             <Card.Content>
               <View style={styles.exerciseHeader}>
-                <TextInput
-                  label="Exercise Name"
-                  value={exercise.name}
-                  onChangeText={(name) => updateExerciseName(exercise.id, name)}
-                  mode="outlined"
-                  style={styles.exerciseNameInput}
-                  placeholder="e.g., Bench Press, Squat"
-                />
+                <Menu
+                  visible={openMenus[exercise.id] || false}
+                  onDismiss={closeAllMenus}
+                  anchor={
+                    <Button
+                      mode="outlined"
+                      onPress={() => toggleMenu(exercise.id)}
+                      style={styles.exerciseSelectButton}
+                      contentStyle={styles.exerciseSelectContent}
+                    >
+                      {exercise.name || "Select Exercise"}
+                    </Button>
+                  }
+                  style={styles.exerciseMenu}
+                >
+                  <View style={styles.exerciseSearchContainer}>
+                    <Searchbar
+                      placeholder="Search exercises..."
+                      value={exerciseSearch}
+                      onChangeText={setExerciseSearch}
+                      style={styles.exerciseSearch}
+                    />
+                  </View>
+                  <ScrollView style={styles.exerciseList}>
+                    {filteredExercises.map((exerciseName) => (
+                      <Menu.Item
+                        key={exerciseName}
+                        onPress={() =>
+                          selectExercise(exercise.id, exerciseName)
+                        }
+                        title={exerciseName}
+                        style={styles.exerciseMenuItem}
+                      />
+                    ))}
+                  </ScrollView>
+                </Menu>
                 <IconButton
                   icon="delete"
                   onPress={() => removeExercise(exercise.id)}
@@ -199,7 +314,9 @@ export const LogActivityModal: React.FC<LogActivityModalProps> = ({
               </View>
 
               <View style={styles.setsHeader}>
-                <Text variant="bodyMedium">Sets</Text>
+                <Text variant="bodyMedium" style={styles.setsHeaderText}>
+                  Sets
+                </Text>
                 <Button
                   mode="text"
                   onPress={() => addSet(exercise.id)}
@@ -213,7 +330,7 @@ export const LogActivityModal: React.FC<LogActivityModalProps> = ({
               {exercise.sets.map((set, setIndex) => (
                 <View key={setIndex} style={styles.setRow}>
                   <Text variant="bodySmall" style={styles.setNumber}>
-                    Set {setIndex + 1}
+                    {setIndex + 1}
                   </Text>
 
                   <TextInput
@@ -233,39 +350,39 @@ export const LogActivityModal: React.FC<LogActivityModalProps> = ({
                     dense
                   />
 
-                  <TextInput
-                    label="Weight"
-                    value={set.weight.toString()}
-                    onChangeText={(value) =>
-                      updateSet(
-                        exercise.id,
-                        setIndex,
-                        "weight",
-                        parseFloat(value) || 0
-                      )
-                    }
-                    mode="outlined"
-                    keyboardType="numeric"
-                    style={styles.setInput}
-                    dense
-                  />
+                  {set.unit !== "bodyw" && (
+                    <TextInput
+                      label="Weight"
+                      value={set.weight.toString()}
+                      onChangeText={(value) =>
+                        updateSet(
+                          exercise.id,
+                          setIndex,
+                          "weight",
+                          parseFloat(value) || 0
+                        )
+                      }
+                      mode="outlined"
+                      keyboardType="numeric"
+                      style={styles.setInput}
+                      dense
+                    />
+                  )}
 
                   <View style={styles.unitContainer}>
                     <Button
                       mode="outlined"
                       onPress={() => {
-                        const units: ("kg" | "lbs" | "bodyweight")[] = [
-                          "kg",
-                          "lbs",
-                          "bodyweight",
-                        ];
-                        const currentIndex = units.indexOf(set.unit);
+                        // Toggle between the global weight unit and bodyweight
                         const nextUnit =
-                          units[(currentIndex + 1) % units.length];
+                          set.unit === globalWeightUnit
+                            ? "bodyw"
+                            : globalWeightUnit;
                         updateSet(exercise.id, setIndex, "unit", nextUnit);
                       }}
                       style={styles.unitButton}
                       compact
+                      icon="swap-horizontal"
                     >
                       {set.unit}
                     </Button>
@@ -303,7 +420,7 @@ export const LogActivityModal: React.FC<LogActivityModalProps> = ({
           textColor={theme.colors.onPrimary}
           style={styles.button}
         >
-          Save Activity
+          Save Workout
         </Button>
         <Button mode="outlined" onPress={onClose} style={styles.button}>
           Cancel
@@ -314,36 +431,24 @@ export const LogActivityModal: React.FC<LogActivityModalProps> = ({
 };
 
 const styles = StyleSheet.create({
-  modalContent: {
-    paddingHorizontal: 16,
-    paddingTop: 8,
-  },
+  modalContent: {},
   modalHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: 8,
+    paddingVertical: 12,
   },
   modalBody: {
-    paddingVertical: 8,
+    paddingVertical: 12,
   },
   input: {
+    marginBottom: 20,
+  },
+  disclaimerText: {
+    textAlign: "center",
+    fontStyle: "italic",
     marginBottom: 16,
-  },
-  weightUnitContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 16,
-  },
-  weightUnitLabel: {
-    marginRight: 12,
-  },
-  weightUnitChips: {
-    flexDirection: "row",
-    gap: 8,
-  },
-  weightUnitChip: {
-    marginRight: 4,
+    opacity: 0.7,
   },
   divider: {
     marginVertical: 16,
@@ -352,51 +457,82 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 12,
+    marginBottom: 20,
+    marginTop: 8,
   },
   exerciseCard: {
-    marginBottom: 12,
+    marginBottom: 20,
   },
   exerciseHeader: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 12,
+    marginBottom: 16,
   },
-  exerciseNameInput: {
+  exerciseSelectButton: {
     flex: 1,
-    marginRight: 8,
+    marginRight: 12,
+    justifyContent: "flex-start",
+    minHeight: 48,
+  },
+  exerciseSelectContent: {
+    justifyContent: "flex-start",
+  },
+  exerciseMenu: {
+    maxHeight: 300,
+  },
+  exerciseSearchContainer: {
+    padding: 8,
+  },
+  exerciseSearch: {
+    marginBottom: 8,
+  },
+  exerciseList: {
+    maxHeight: 200,
+  },
+  exerciseMenuItem: {
+    paddingVertical: 4,
   },
   setsHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 8,
+    marginBottom: 16,
+  },
+  setsHeaderText: {
+    marginLeft: 0,
   },
   setRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 8,
-    gap: 8,
+    justifyContent: "flex-start",
+    marginBottom: 16,
+    gap: 6,
+    paddingVertical: 4,
   },
   setNumber: {
-    width: 50,
+    width: 30,
     textAlign: "center",
+    marginRight: 4,
   },
   setInput: {
-    flex: 1,
+    width: 60,
+    marginRight: 8,
   },
   unitContainer: {
-    minWidth: 80,
+    minWidth: 70,
   },
   unitButton: {
-    minWidth: 80,
+    minWidth: 70,
+    minHeight: 36,
+    paddingHorizontal: 8,
   },
   modalActions: {
     flexDirection: "column",
-    paddingVertical: 16,
+    paddingVertical: 20,
     paddingBottom: 32, // Extra padding for safe area
   },
   button: {
-    marginBottom: 8,
+    marginBottom: 12,
+    minHeight: 48,
   },
 });

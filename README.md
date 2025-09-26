@@ -8,6 +8,8 @@
 - - weight: Weight used (can be 0 for bodyweight).
 - - - unit: 'kg', 'lbs', or 'bodyweight'. (kg / lbs can be changed in settings)
 
+what about running?
+
 ---
 
 Plan:

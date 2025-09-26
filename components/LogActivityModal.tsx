@@ -31,7 +31,7 @@ export const LogActivityModal: React.FC<LogActivityModalProps> = ({
   return (
     <View style={styles.modalContent}>
       <View style={styles.modalHeader}>
-        <Title>Log Activity</Title>
+        <Title>Log Workout</Title>
         <IconButton
           icon="close"
           onPress={onClose}

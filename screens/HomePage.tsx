@@ -19,9 +19,11 @@ import {
 import { ProModal } from "../components/ProModal";
 import { LogActivityModal } from "../components/LogActivityModal";
 import { HistoryModal } from "../components/HistoryModal";
+import { DayScreen } from "./DayScreen";
 
 export const HomePage = () => {
   const [index, setIndex] = useState(0);
+  const [showDayScreen, setShowDayScreen] = useState(false);
   const { theme, toggleTheme } = useTheme();
 
   const logModalRef = useRef<BottomSheetModalRef>(null);
@@ -32,7 +34,7 @@ export const HomePage = () => {
     { key: "home", title: "Home", icon: "home-outline", focusedIcon: "home" },
     {
       key: "log",
-      title: "Log Activity",
+      title: "Log Workout",
       icon: "plus-circle-outline",
       focusedIcon: "plus-circle",
     },
@@ -45,7 +47,12 @@ export const HomePage = () => {
   ]);
 
   const renderScene = BottomNavigation.SceneMap({
-    home: () => <HomeScreen onHistoryPress={handleShowHistoryModal} />,
+    home: () => (
+      <HomeScreen
+        onHistoryPress={handleShowHistoryModal}
+        onLogWorkout={handleShowDayScreen}
+      />
+    ),
     log: () => null, // We'll handle this with modal
     settings: SettingsScreen,
   });
@@ -79,6 +86,29 @@ export const HomePage = () => {
   const handleCloseHistoryModal = () => {
     historyModalRef.current?.close();
   };
+
+  const handleShowDayScreen = () => {
+    setShowDayScreen(true);
+  };
+
+  const handleBackFromDayScreen = () => {
+    setShowDayScreen(false);
+  };
+
+  const handleLogActivityFromDay = () => {
+    setShowDayScreen(false);
+    logModalRef.current?.expand();
+  };
+
+  if (showDayScreen) {
+    return (
+      <DayScreen
+        onBack={handleBackFromDayScreen}
+        onLogActivity={handleLogActivityFromDay}
+        date={new Date()}
+      />
+    );
+  }
 
   return (
     <View
@@ -143,7 +173,13 @@ export const HomePage = () => {
   );
 };
 
-const HomeScreen = ({ onHistoryPress }: { onHistoryPress: () => void }) => (
+const HomeScreen = ({
+  onHistoryPress,
+  onLogWorkout,
+}: {
+  onHistoryPress: () => void;
+  onLogWorkout: () => void;
+}) => (
   <ScrollView
     style={[styles.contentContainer, { flex: 1 }]}
     showsVerticalScrollIndicator={false}
@@ -154,7 +190,7 @@ const HomeScreen = ({ onHistoryPress }: { onHistoryPress: () => void }) => (
         <Paragraph>No workout logged for today.</Paragraph>
       </Card.Content>
       <Card.Actions>
-        <Button>Log Workout</Button>
+        <Button onPress={onLogWorkout}>Log Workout</Button>
       </Card.Actions>
     </Card>
 
@@ -164,7 +200,7 @@ const HomeScreen = ({ onHistoryPress }: { onHistoryPress: () => void }) => (
 
 const LogScreen = () => (
   <View style={styles.center}>
-    <Title>Log Activity Screen</Title>
+    <Title>Log Workout Screen</Title>
   </View>
 );
 

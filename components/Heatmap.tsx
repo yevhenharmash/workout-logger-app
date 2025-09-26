@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import { Card, Title, Button } from "react-native-paper";
+import { Card, Text, Button } from "react-native-paper";
 import { View, StyleSheet, ScrollView } from "react-native";
 import { useTheme } from "../contexts/ThemeContext";
 
@@ -100,7 +100,7 @@ export const Heatmap: React.FC<HeatmapProps> = ({ onHistoryPress }) => {
     <Card style={styles.card}>
       <Card.Content>
         <View style={styles.header}>
-          <Title>Weekly Activity</Title>
+          <Text variant="titleLarge">Weekly Activity</Text>
           <Button mode="outlined" onPress={onHistoryPress} icon="history">
             History
           </Button>
@@ -111,7 +111,9 @@ export const Heatmap: React.FC<HeatmapProps> = ({ onHistoryPress }) => {
           <View style={styles.dayLabels}>
             {dayLabels.map((label, index) => (
               <View key={index} style={styles.dayLabel}>
-                <Title style={styles.dayLabelText}>{label}</Title>
+                <Text variant="bodySmall" style={styles.dayLabelText}>
+                  {label}
+                </Text>
               </View>
             ))}
           </View>

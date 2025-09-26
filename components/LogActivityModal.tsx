@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 import {
-  Title,
+  Text,
   Paragraph,
   Button,
   IconButton,
@@ -31,7 +31,7 @@ export const LogActivityModal: React.FC<LogActivityModalProps> = ({
   return (
     <View style={styles.modalContent}>
       <View style={styles.modalHeader}>
-        <Title>Log Workout</Title>
+        <Text variant="titleLarge">Add Workout to Today</Text>
         <IconButton
           icon="close"
           onPress={onClose}

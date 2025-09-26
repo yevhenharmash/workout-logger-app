@@ -34,7 +34,7 @@ export const HomePage = () => {
     { key: "home", title: "Home", icon: "home-outline", focusedIcon: "home" },
     {
       key: "log",
-      title: "Log Workout",
+      title: "Quick Workout",
       icon: "plus-circle-outline",
       focusedIcon: "plus-circle",
     },
@@ -190,7 +190,7 @@ const HomeScreen = ({
         <Paragraph>No workout logged for today.</Paragraph>
       </Card.Content>
       <Card.Actions>
-        <Button onPress={onLogWorkout}>Log Workout</Button>
+        <Button onPress={onLogWorkout}>Log for Today</Button>
       </Card.Actions>
     </Card>
 

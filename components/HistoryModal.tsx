@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
-import { Title, Button, IconButton, Divider } from "react-native-paper";
+import { Text, Button, IconButton, Divider } from "react-native-paper";
 import { CalendarModalContent } from "./Calendar";
 
 interface HistoryModalProps {
@@ -17,7 +17,7 @@ export const HistoryModal: React.FC<HistoryModalProps> = ({
       style={[styles.modalContent, { backgroundColor: theme.colors.surface }]}
     >
       <View style={styles.modalHeader}>
-        <Title>Workout History</Title>
+        <Text variant="titleLarge">Workout History</Text>
         <IconButton
           icon="close"
           onPress={onClose}

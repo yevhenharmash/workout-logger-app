@@ -10,4 +10,11 @@
 
 ---
 
+Plan:
+
+1. Release / test a version with local / async storage
+2. Add auth and database
+
+---
+
 ## All rights belong to Yevhen Harmash, euggarm@gmail.com

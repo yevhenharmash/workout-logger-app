@@ -3,7 +3,7 @@ import { View, StyleSheet, ScrollView } from "react-native";
 import {
   Appbar,
   Card,
-  Title,
+  Text,
   Paragraph,
   Button,
   IconButton,
@@ -20,6 +20,7 @@ import { ProModal } from "../components/ProModal";
 import { LogActivityModal } from "../components/LogActivityModal";
 import { HistoryModal } from "../components/HistoryModal";
 import { DayScreen } from "./DayScreen";
+import { SettingsScreen } from "./SettingsScreen";
 
 export const HomePage = () => {
   const [index, setIndex] = useState(0);
@@ -40,7 +41,7 @@ export const HomePage = () => {
     },
     {
       key: "settings",
-      title: "Settings",
+      title: "Settings & Info",
       icon: "cog-outline",
       focusedIcon: "cog",
     },
@@ -186,7 +187,9 @@ const HomeScreen = ({
   >
     <Card style={styles.card}>
       <Card.Content>
-        <Title>Today - {new Date().toLocaleDateString()}</Title>
+        <Text variant="headlineSmall">
+          Today - {new Date().toLocaleDateString()}
+        </Text>
         <Paragraph>No workout logged for today.</Paragraph>
       </Card.Content>
       <Card.Actions>
@@ -200,15 +203,11 @@ const HomeScreen = ({
 
 const LogScreen = () => (
   <View style={styles.center}>
-    <Title>Log Workout Screen</Title>
+    <Text variant="headlineSmall">Log Workout Screen</Text>
   </View>
 );
 
-const SettingsScreen = () => (
-  <View style={styles.center}>
-    <Title>Settings Screen</Title>
-  </View>
-);
+// SettingsScreen is now imported from separate file
 
 const styles = StyleSheet.create({
   container: {

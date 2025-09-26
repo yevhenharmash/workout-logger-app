@@ -3,6 +3,7 @@ import { Platform } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { SettingsProvider } from "./contexts/SettingsContext";
 import { HomePage } from "./screens/HomePage";
 
 // Conditional import for toast - only import on mobile platforms
@@ -19,7 +20,9 @@ const Main = () => {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider>
-        <HomePage />
+        <SettingsProvider>
+          <HomePage />
+        </SettingsProvider>
       </ThemeProvider>
     </GestureHandlerRootView>
   );

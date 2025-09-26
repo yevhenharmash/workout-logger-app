@@ -419,11 +419,10 @@ export const LogActivityModal: React.FC<LogActivityModalProps> = ({
           onPress={handleSave}
           buttonColor={theme.colors.primary}
           textColor={theme.colors.onPrimary}
-          style={styles.button}
         >
           Save Workout
         </Button>
-        <Button mode="outlined" onPress={onClose} style={styles.button}>
+        <Button mode="outlined" onPress={onClose}>
           Cancel
         </Button>
       </View>
@@ -522,12 +521,7 @@ const styles = StyleSheet.create({
   },
   modalActions: {
     flexDirection: "column",
-    paddingVertical: 20,
-    paddingBottom: 32, // Extra padding for safe area
-  },
-  button: {
-    marginBottom: 12,
-    minHeight: 48,
+    gap: 12,
   },
   deleteButton: {
     marginLeft: "auto",

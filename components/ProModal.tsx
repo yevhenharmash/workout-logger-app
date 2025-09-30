@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView, TextInput } from "react-native";
 import {
   Title,
   Paragraph,
@@ -124,6 +124,8 @@ export const ProModal: React.FC<ProModalProps> = ({ onClose, theme }) => {
           Maybe Later
         </Button>
       </View>
+
+      <TextInput placeholder="Type here to test keyboard" />
     </View>
   );
 };

@@ -5,7 +5,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { SettingsProvider } from "./contexts/SettingsContext";
 import { WorkoutProvider } from "./contexts/WorkoutContext";
-import { HomePage } from "./screens/HomePage";
+import { AppNavigator } from "./navigation/AppNavigator";
 
 // Conditional import for toast - only import on mobile platforms
 let ToastMessage: any = null;
@@ -23,7 +23,7 @@ const Main = () => {
       <ThemeProvider>
         <SettingsProvider>
           <WorkoutProvider>
-            <HomePage />
+            <AppNavigator />
           </WorkoutProvider>
         </SettingsProvider>
       </ThemeProvider>

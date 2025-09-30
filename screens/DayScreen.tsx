@@ -12,16 +12,12 @@ import { useTheme } from "../contexts/ThemeContext";
 import { Logo } from "../components/Logo";
 
 interface DayScreenProps {
-  onBack: () => void;
-  onLogActivity: () => void;
-  date: Date;
+  navigation: any;
+  route: any;
 }
 
-export const DayScreen: React.FC<DayScreenProps> = ({
-  onBack,
-  onLogActivity,
-  date,
-}) => {
+export const DayScreen: React.FC<DayScreenProps> = ({ navigation, route }) => {
+  const date = route.params?.date || new Date();
   const { theme } = useTheme();
 
   return (
@@ -34,7 +30,7 @@ export const DayScreen: React.FC<DayScreenProps> = ({
           { backgroundColor: theme.colors.surface },
         ]}
       >
-        <Appbar.BackAction onPress={onBack} />
+        <Appbar.BackAction onPress={() => navigation.goBack()} />
         <Appbar.Content title={date.toLocaleDateString()} />
       </Appbar.Header>
 
@@ -50,7 +46,7 @@ export const DayScreen: React.FC<DayScreenProps> = ({
           <Card.Actions>
             <Button
               mode="contained"
-              onPress={onLogActivity}
+              onPress={() => navigation.navigate("Log")}
               buttonColor={theme.colors.primary}
               textColor={theme.colors.onPrimary}
             >
@@ -63,7 +59,7 @@ export const DayScreen: React.FC<DayScreenProps> = ({
       <FAB
         icon="plus"
         style={[styles.fab, { backgroundColor: theme.colors.primary }]}
-        onPress={onLogActivity}
+        onPress={() => navigation.navigate("Log")}
       />
     </View>
   );

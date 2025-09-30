@@ -104,7 +104,11 @@ const AppNavigator = () => {
         }}
       />
 
-      <BottomSheetModal ref={logModalRef} onClose={handleCloseModal}>
+      <BottomSheetModal
+        ref={logModalRef}
+        onClose={handleCloseModal}
+        initialSnapIndex={1} // Open to the second snap point (90%) by default
+      >
         <LogActivityModal onClose={handleCloseModal} theme={theme} />
       </BottomSheetModal>
     </View>

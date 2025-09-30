@@ -113,7 +113,11 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         </ScrollView>
       </KeyboardAvoidingView>
 
-      <BottomSheetModal ref={proModalRef} onClose={handleCloseProModal}>
+      <BottomSheetModal
+        snapPoints={["80%", "90%"]}
+        ref={proModalRef}
+        onClose={handleCloseProModal}
+      >
         <ProModal onClose={handleCloseProModal} theme={theme} />
       </BottomSheetModal>
 
